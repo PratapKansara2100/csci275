@@ -1,5 +1,118 @@
 {%extends "layout.html"%} 
 {%block content%} 
-<h1>{{ user_name }}</h1>
-<button type="button" class="btn btn-primary btn-lg" onclick="window.location.href='{{ url_for( 'delete') }}';">Delete Account</button>
+<div class="content-section col-md-4 ">
+    <div class="media">
+      <img class="rounded-circle account-img" src="/static/images/default.jpg">
+      <div class="media-body">
+          <!-- add current user's name below -->
+        <h3 >First Name: </h3>
+        <h3 >Last Name: </h3>
+        <h3 >User Email: </h3>
+        <!-- add current user's email below -->
+        <p class="text-secondary"></p>
+      </div>
+    </div>
+
+
+
+{% if user %}
+    <button type="button" class="btn btn-primary " data-bs-toggle="modal" data-bs-target="#exampleModal4">
+      Update Account
+    </button>
+{% endif %}
+  
+  <!-- Modal Update account information  -->
+  <div class="modal fade" id="exampleModal4" tabindex="-1" aria-labelledby="exampleModalLabel4" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel4">Update Account</h5>
+          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            
+            <fieldset class="form-group">
+                <div class="form-group">
+                    {{form.Fname.label(class="form-control-label")}}
+
+                    {% if form.Fname.errors %}
+                    {{form.Fname(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {%for error in form.Fname.errors%}
+                        <span>{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    {%else%}
+                    {{form.Fname(class="form-control form-control-lg ")}}                        
+                    {%endif%}
+
+                    
+                </div>
+                <div class="form-group">
+                    {{form.Lname.label(class="form-control-label")}}
+                    {% if form.Lname.errors %}
+                    {{form.Lname(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {%for error in form.Lname.errors%}
+                        <span>{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    {%else%}
+                    {{form.Lname(class="form-control form-control-lg ")}}                        
+                    {%endif%}
+
+                </div>
+                <div class="form-group">
+                    {{form.email.label(class="form-control-label")}}
+                    {% if form.email.errors %}
+                    {{form.email(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {%for error in form.email.errors%}
+                        <span>{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    {%else%}
+                    {{form.email(class="form-control form-control-lg ")}}                        
+                    {%endif%}
+                </div>
+                <div class="form-group">
+                    {{form.NewPassword.label(class="form-control-label")}}
+                    {% if form.NewPassword.errors %}
+                    {{form.NewPassword(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {%for error in form.NewPassword.errors%}
+                        <span>{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    {%else%}
+                    {{form.NewPassword(class="form-control form-control-lg ")}}                        
+                    {%endif%}                    
+                </div>
+                <div class="form-group">
+                    {{form.confirm_New_password.label(class="form-control-label")}}
+                    {% if form.confirm_New_password.errors %}
+                    {{form.confirm_New_password(class="form-control form-control-lg is-invalid")}}
+                    <div class="invalid-feedback">
+                        {%for error in form.confirm_New_password.errors%}
+                        <span>{{error}}</span>
+                        {%endfor%}
+                    </div>
+                    {%else%}
+                    {{form.confirm_New_password(class="form-control form-control-lg ")}}                        
+                    {%endif%}                    </div>
+                
+            </fieldset>
+            <div class ="form-group pt-3">
+                {{form.submit(class='btn btn-outline-info')}}
+            </div>
+      </div>
+    </div>
+  </div>
+
+
+
+</div>
+<p></p>
+
+<button type="button" class="btn btn-danger " onclick="window.location.href='{{ url_for( 'delete') }}';">Delete Account</button>
 {%endblock%}

@@ -1,11 +1,105 @@
 {%extends "layout.html"%} 
 {%block content%} 
-<h1>{{ class_name }}</h1>
-<h1>Creator: {{ creator }}</h1>
+
+<h1>About</h1>
+<div style="color:white" class="rcorners1">
+    <h1 style="color:white" >Class Name: {{ class_name }}</h1>
+    <div class="remove-bottom-padding">
+    <br>
+    <p class="remove-bottom-padding">Class Creator: {{ creator }}</p>
+    <br>
+    <p class="remove-bottom-padding">Class Discription: <!--  add the data declaration here and do so respectively for the other fieds --></p> 
+    <br>
+    <P class="remove-bottom-padding">Class Type: </P>
+    <br>
+    <p class="remove-bottom-padding">Class Code: </p>
+    <br>
+    <p class="remove-bottom-padding">Class Size: </p>
+</div>
+</div>
+<p></p>
+<p></p>
+<h1>Announcement</h1>
+<!-- Button trigger modal for making announcement -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal2">
+  Make Announcement
+</button>
+
+<!-- Modal making announcement -->
+<div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel2" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel2">Join Classroom</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          
+        <form method="POST" action ="">
+          <fieldset class="form-group"></fieldset>
+            <div class="form-group">
+            {{form.AnnouncementTitle.label(class="form-control-label")}}
+
+            {% if form.AnnouncementTitle.errors %}
+            {{form.AnnouncementTitle(class="form-control form-control-lg is-invalid")}}
+            <div class="invalid-feedback">
+                {%for error in form.AnnouncementTitle.errors%}
+                <span>{{error}}</span>
+                {%endfor%}
+            </div>
+            {%else%}
+            {{form.AnnouncementTitle(class="form-control form-control-lg ")}}                        
+            {%endif%}
+
+            
+        </div>
+        <div class="form-group">
+            {{form.AnnouncementContent.label(class="form-control-label")}}
+            {% if form.AnnouncementContent.errors %}
+            {{form.AnnouncementContent(class="form-control form-control-lg is-invalid")}}
+            <div class="invalid-feedback">
+                {%for error in form.AnnouncementContent.errors%}
+                <span>{{error}}</span>
+                {%endfor%}
+            </div>
+            {%else%}
+            {{form.AnnouncementContent(class="form-control form-control-lg ")}}                        
+            {%endif%}
+        </div>
+        </fieldset>
+        <div class ="form-group pt-3">
+        {{form.submit(class='btn btn-outline-info')}}
+        </div>
+  </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+</div>
+</div>
+</div>
+</div>
+
+
+<p></p>
+<h2>Recent Announcements</h2>
+<article class="media content-section">
+  <div class="media-body">
+    <div class="article-metadata">
+      <!-- Put below the name of the person making the announcement/ user making the announcement  -->
+      <a class="mr-2" href="#"></a>
+    </div>
+    <!-- put below the announcement title -->
+    <h2><a class="article-title" href="#"></a></h2>
+    <!-- put below the announcement content -->
+    <p class="article-content"></p>
+  </div>
+</article>
 
 {% for student in s_list %}
 <ul class="list-group">
+  <h3> Students is class:</h3>
   <li class="list-group-item">{{ student }}</li>
 </ul>
 {% endfor %}
+
 {%endblock%}

@@ -3,14 +3,13 @@ from Classes.Classroom import Classroom, PrivateClassroom, PublicClassroom
 from Classes.Account import Student, Professor
 from flask import Flask, render_template, url_for, redirect, request, session
 from flask.helpers import flash
-from forms import RegistrationForm, LoginForm, CreatClassroom_JoinClassroom
+from forms import RegistrationForm, LoginForm, CreatClassroom_JoinClassroom, MakeAnnouncement, updateUserAccount
 import jsonpickle
 app = Flask(__name__)
 
 app.config['SECRET_KEY']='2c4ea20438c3372acc6869f8e70fc460'
 
 @app.route('/home', methods=['GET', 'POST'])
-@app.route('/', methods=['GET', 'POST'])
 def home():
     form = CreatClassroom_JoinClassroom()
     classname = ''
@@ -19,8 +18,8 @@ def home():
             classrooms = USER.get_class_list()
     else:
         return redirect(url_for('login'))
-
-    if(request.method == 'POST'):
+    
+    if(request.method == 'POST' or form.validate_on_submit()):
         try:
             if (request.form.get('submit')):
                     classname = form.ClassName.data
@@ -38,6 +37,7 @@ def home():
         except ValueError as e:
             flash(f'{e}', 'danger')
     return render_template("home.html",form = form, user=session.get('User'), classes=classrooms)
+    
 
 
 @app.route('/logout')
@@ -64,6 +64,7 @@ def register():
     return render_template('register.html', title = 'Register', form = form)
 
 @app.route('/login', methods=['GET', 'POST'])
+@app.route('/', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
     if form.validate_on_submit():
@@ -80,6 +81,7 @@ def login():
 
 @app.route('/classroom/<className>', methods=['GET', 'POST'])
 def classroom(className):
+    form = MakeAnnouncement()
     CLASSROOM = DataGateway.get_data('Classroom', className)
     if DataGateway.get_data('User', CLASSROOM.get_creator()):
         creator = DataGateway.get_data('User', CLASSROOM.get_creator()).get_name_string()
@@ -89,12 +91,14 @@ def classroom(className):
 
     for student in CLASSROOM.get_student_list():
         students.append(DataGateway.get_data('User', student).get_name_string())
-    return render_template('classroom.html', class_name=className, creator=creator, s_list=students, user=session.get('User'))
+    
+    return render_template('classroom.html', class_name=className, creator=creator, s_list=students, user=session.get('User'), form = form)
 
 @app.route('/profile', methods=['GET', 'POST'])
 def profile():
+    form = updateUserAccount()
     USER = DataGateway.get_data('User', jsonpickle.decode(session['User']).get_email())
-    return render_template('profile.html', user_name=USER.get_name_string(), user=USER)
+    return render_template('profile.html', user_name=USER.get_name_string(), user=USER, form=form)
 
 @app.route('/profile/delete', methods=['GET'])
 def delete():
@@ -110,5 +114,17 @@ def delete():
     DataGateway.delete_data('User', USER.get_email())
     return redirect(url_for('login'))
 
+@app.route('/upload_file', methods = ['GET', 'POST'])
+def upload_file():
+
+    if request.method=="POST":
+        if request.files:
+            pdf = request.files["pdf"]
+            flash(f'File uploaded successfully', 'success')
+            print(pdf) 
+
+    return render_template('upload.html')
+
 if __name__ == "__main__":
     app.run(debug=True) 
+
